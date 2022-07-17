@@ -101,8 +101,7 @@ int main(int argc, char* argv[])
 	if (argc != 3) {
 		printf("Desired number of arguments are not their "
 			"in argv....\n");
-		printf("2 files required first one input and "
-			"second one output....\n");
+		printf("%d\n", argc);
 		exit(-1);
 	}
 
@@ -120,21 +119,9 @@ int main(int argc, char* argv[])
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank_of_process);
 
 	if (rank_of_process == 0) {
-		// Opening the file
-		file = fopen(argv[1], "r");
-
-		// Printing Error message if any
-		if (file == NULL) {
-			printf("Error in opening file\n");
-			exit(-1);
-		}
-
-		// Reading number of Elements in file ...
 		// First Value in file is number of Elements
-		printf(
-			"Reading number of Elements From file ....\n");
-		fscanf(file, "%d", &number_of_elements);
-		printf("Number of Elements in the file is %d \n",
+		number_of_elements = atoi(argv[1]);
+		printf("Number of Elements is %d \n",
 			number_of_elements);
 
 		// Computing chunk size
@@ -148,10 +135,10 @@ int main(int argc, char* argv[])
 	
 	// Reading the rest elements in which
 	// operation is being performed
-	printf("Reading the array from the file.......\n");
+	printf("Generating the array.......\n");
 	for(int i = 0; i < number_of_elements; i++)
 	{
-			fscanf(file, "%d", &data[i]);
+			data[i] = rand();
 	}
 
 	// Padding data with zero
@@ -171,8 +158,6 @@ int main(int argc, char* argv[])
 
 	printf("\n");
 
-	fclose(file);
-	file = NULL;
 	}
 
 	// Blocks all process until reach this point
